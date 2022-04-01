@@ -1,7 +1,7 @@
 # Kubernetes
 
 
-1.Create deployment and service for above airflow and postgres (you can use postgres helm chart for postgres deployment
+1.Create deployment and service for above airflow and postgres
 
 2.Deploy airflow and postgres
 
