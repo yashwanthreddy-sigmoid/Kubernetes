@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: puckel-deploy
+  labels:
+    name: puckel-deploy
+    app: myapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: puckel-pod
+      app: myapp
+  template:
+    metadata:
+      name: puckel-pod
+      labels:
+        name: puckel-pod
+        app: myapp
+    spec:
+      containers:
+        - name: puckel
+          image: puckel/docker-airflow:1.10.9
+          ports:
+            - containerPort: 8080
+          env:
+            - name: AIRFLOW__CORE__SQL_ALCHEMY_CONN
+              value: postgresql://airflow:airflow@postgres-service-db:5432/airflow
+            - name: AIRFLOW__CORE__EXECUTOR
+              value: LocalExecutor
+          volumeMounts:
+            - name: dags-host-volume
+              mountPath: /usr/local/airflow/dags
+
+      volumes:
+        - name: dags-host-volume
+          hostPath:
+            path: /mnt/airflow/dags
+            type: Directory
